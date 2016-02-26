@@ -28,7 +28,7 @@ void read_data_cb(struct ev_loop *loop,ev_io *w,int revents){
 	
 	if(size<=0){
 	//	fprintf(log,"Worker %d. Client %d disconnect\n",id,w->fd);
-		fclose(log);
+	//	fclose(log);
 	
 		close(w->fd);
 		ev_io_stop(loop,w);
@@ -37,7 +37,7 @@ void read_data_cb(struct ev_loop *loop,ev_io *w,int revents){
 	}
 
 	//fprintf(log,"worker %d recv data from sd: %d\n",id,w->fd);
-	fclose(log);
+	//fclose(log);
 	
 	std::string response=http_request(buf,home_directory);
 	if(response.size()!=0)
@@ -53,17 +53,17 @@ void new_client_cb(struct ev_loop* loop,ev_io * w, int revents){
 	ssize_t size=sock_fd_read(w->fd,buf,sizeof(buf),&sd);
 	if(size<0){
 	//	fprintf(log,"Error buffer read\n");
-		fclose(log);
+	//	fclose(log);
 		return ;
 	}
 	if(sd<0){
 	//	fprintf(log,"Error fd read\n");
-		fclose(log);
+	//	fclose(log);
 		return ;
 	}
 	
 	//fprintf(log,"Worker %d. Client %d connect\n",id,sd);
-	fclose(log);
+	//fclose(log);
 
 	ev_io * w_read=new struct ev_io;
 	ev_io_init(w_read,read_data_cb,sd,EV_READ);

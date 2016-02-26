@@ -117,6 +117,7 @@ int main(int argc,char **argv){
 	globalArgs.host=NULL;
 	globalArgs.port=BIND_PORT;
 	globalArgs.directory=HOME_DIRECTORY;
+	globalArgs.daemon=0;
 
 	opt=getopt(argc,argv,optString);
 	while(opt!=-1){
@@ -137,7 +138,7 @@ int main(int argc,char **argv){
 		opt=getopt(argc,argv,optString);
 	}
 	
-	if(globalArgs.daemon){
+	if(!globalArgs.daemon){
 		if((pid=fork())<0){
 			perror("Fork error");
 			return 1;
