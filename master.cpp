@@ -42,7 +42,7 @@ void accept_cb(struct ev_loop * loop,ev_io * w,int revents){
 	}
 
 	send_in_worker(client_sd);
-	printf("Accept. Client socket:%d\n",client_sd);
+	//printf("Accept. Client socket:%d\n",client_sd);
 };
 
 int daemon(){
@@ -144,7 +144,10 @@ int main(int argc,char **argv){
 			return 1;
 		}else if(pid!=0)
 		return 0;
-
+		
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 		setsid();
 	}
 	daemon();
