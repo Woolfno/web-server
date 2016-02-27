@@ -29,11 +29,14 @@ std::string get(const std::vector<std::string>& request){
 	std::stringstream response_body;
 
 	std::string path=std::string(home_directory)+request[1];
-	if(request[1]=="/")	
-		path+="index.html";
-
-	std::ifstream fin(path.c_str());
-	if(!fin.is_open()){
+	bool fail=false;
+	if(request[1]=="/"){	
+		fail=true;
+//		path+="index.html";
+	}
+	
+	std::ifstream fin(path.c_str(),std::ifstream::in);
+	if(fail || !fin.is_open()){
 		response<<"HTTP/1.0 404 Not Found\r\n"
 				<<"Content-Type: text/html; charset=utf-8\r\n"
 				<<"Content-Length: "<< response_body.str().length()
