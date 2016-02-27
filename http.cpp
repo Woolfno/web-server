@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <time.h>
+
 static const char * home_directory;
 
 const std::vector<std::string> explode(const std::string& s, const char& c){
@@ -42,11 +44,20 @@ std::string get(const std::vector<std::string>& request){
 
 	response_body<<fin.rdbuf();
 	fin.close();
-	response<<"HTTP/1.0 OK\r\n"
+	
+	time_t seconds=time(NULL);
+	struct tm * gm=gmtime(&seconds);
+	char buf[80];
+	char format[]="%a, %e %b %G %T";
+	strftime(buf,sizeof(buf),format,gm);
+
+	response<<"HTTP/1.0 200 OK\r\n"
+			<<"Date: "<<buf<<" GMT\r\n"
 			<<"Version: HTTP/1.1\r\n"
 			<<"Content-Type: text/html; charset=utf-8\r\n"
-			<<"Content-Length: "<< response_body.str().length()
-			<<"\r\n\r\n"
+			<<"Content-Length: "<< response_body.str().length()<<"\r\n"
+			<<"Connection: close\r\n"
+			<<"\r\n"
 			<<response_body.str();
 
 	return response.str();

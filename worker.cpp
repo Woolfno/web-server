@@ -42,6 +42,8 @@ void read_data_cb(struct ev_loop *loop,ev_io *w,int revents){
 	std::string response=http_request(buf,home_directory);
 	if(response.size()!=0)
 		send(w->fd,response.c_str(),response.length(),MSG_NOSIGNAL);
+	shutdown(w->fd,SHUT_WR);
+	close(w->fd);
 }
 
 void new_client_cb(struct ev_loop* loop,ev_io * w, int revents){
