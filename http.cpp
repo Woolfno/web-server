@@ -77,6 +77,10 @@ std::string get(const std::vector<std::string>& request){
 }
 
 std::string http_request(const char * request,const char * directory){
+	FILE * f=fopen("/home/box/log.txt","a");
+	fprintf(f,"%s\n",request);
+	fclose(f);
+
 	home_directory=directory;
 	std::vector<std::string> request_v=explode(std::string(request),' ');
 	if(request_v[0]=="GET")
