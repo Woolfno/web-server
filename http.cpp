@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <time.h>
+#include <dirent.h>
 
 static const char * home_directory;
 
@@ -27,16 +28,25 @@ const std::vector<std::string> explode(const std::string& s, const char& c){
 std::string get(const std::vector<std::string>& request){
 	std::stringstream response;
 	std::stringstream response_body;
+	DIR * dir;
+	bool is_dir=false;
+	std::string fileName;
 
-	std::string path=std::string(home_directory)+request[1];
-	bool fail=false;
-	if(request[1]=="/"){	
-		fail=true;
-//		path+="index.html";
-	}
+	std::size_t found=request[1].find("?");
+	if(found!=std::string::npos)
+		fileName=request[1].substr(0,found);
+	else
+		fileName=request[1];	
+	std::string path=std::string(home_directory)+fileName;
 	
+	dir=opendir(path.c_str());
+	if(dir!=NULL){
+		closedir(dir);
+		is_dir=true;
+	}
+
 	std::ifstream fin(path.c_str(),std::ifstream::in);
-	if(fail || !fin.is_open()){
+	if(is_dir || !fin.is_open()){
 		response<<"HTTP/1.0 404 Not Found\r\n"
 				<<"Content-Type: text/html; charset=utf-8\r\n"
 				<<"Content-Length: "<< response_body.str().length()
